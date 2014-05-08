@@ -586,7 +586,7 @@ add_action( 'wp_ajax_nopriv_inpost_get_machines', 'get_machines');
 		}
 
 		// Save the parcel size to the session for retreival later
-		//WC()->session->set('inpost_parcel_size', $parcelSize);
+		WC()->session->set('inpost_parcel_size', $parcelSize);
 
 		//echo json_encode($is_dimension);
 		return $is_dimension;
@@ -664,6 +664,10 @@ function my_custom_checkout_field_update_order_meta( $order_id )
 			update_post_meta( $order_id, 'InPost Mobile',
 				esc_attr($_POST['attributes']['inpost_cust_mobile']));
 		}
+
+		$parcel_size = WC()->session->get('inpost_parcel_size');
+		update_post_meta( $order_id, '_inpost_parcel',
+			esc_attr($parcel_size));
 	}
 }
 
