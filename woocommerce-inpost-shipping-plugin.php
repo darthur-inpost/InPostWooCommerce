@@ -647,6 +647,9 @@ add_action('woocommerce_checkout_update_order_meta',
 
 function my_custom_checkout_field_update_order_meta( $order_id )
 {
+	// We can also save the details into the InPost parcel table.
+	global $wpdb;
+
 	if(pos($_POST['shipping_method']) == 'inpost_shipping_method')
 	{
 		// The user has selected the InPost shipping method we must
@@ -668,6 +671,16 @@ function my_custom_checkout_field_update_order_meta( $order_id )
 		$parcel_size = WC()->session->get('inpost_parcel_size');
 		update_post_meta( $order_id, '_inpost_parcel',
 			esc_attr($parcel_size));
+
+		$sql_data = array(
+			'order_id' => $order_id,
+			'parcel_target_machine_id' => $_POST['attributes']['inpost_dest_machine'],
+			'api_source' => 'UK',
+			'variables'  =>  $_POST['attributes']['inpost_cust_mobile'] .
+			':' . $parcel_size .
+			':' . $_POST['billing_email'],
+		);
+		$wpdb->insert($wpdb->prefix . INPOST_TABLE_NAME, $sql_data);
 	}
 }
 
