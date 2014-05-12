@@ -673,10 +673,11 @@ function my_custom_checkout_field_update_order_meta( $order_id )
 			esc_attr($parcel_size));
 
 		$sql_data = array(
-			'order_id' => $order_id,
+			'order_id'      => $order_id,
+			'parcel_status' => 'Prepared',
 			'parcel_target_machine_id' => $_POST['attributes']['inpost_dest_machine'],
-			'api_source' => 'UK',
-			'variables'  =>  $_POST['attributes']['inpost_cust_mobile'] .
+			'api_source'    => 'UK',
+			'variables'     =>  $_POST['attributes']['inpost_cust_mobile'] .
 			':' . $parcel_size .
 			':' . $_POST['billing_email'],
 		);
