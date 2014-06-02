@@ -1,44 +1,27 @@
 <?php
 /**
- * Plugin Name: InPost Shipping Plugin
- * Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
- * Description: This plugin allows shoppers to pick an InPost location for their parcel.
- * Version: 1.0
- * Author: InPost, David Arthur
- * Author URI: http://www.inpost.co.uk
- * License: GPL2
- */
-/*
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
-    published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
-/**
 * Check if WooCommerce is active
 */
+
+if(!defined("INPOST_TABLE_NAME"))
+{
+	define("INPOST_TABLE_NAME", "order_shipping_inpostparcels");
+}
+
+if(!defined("INPOST_DB_VERSION"))
+{
+	define("INPOST_DB_VERSION", "1.0.1");
+}
+
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 {
-	define("INPOST_TABLE_NAME",     "order_shipping_inpostparcels");
-
-	//include_once('includes/inpostparcelsHelper.php');
-
 	function inpost_shipping_init()
 	{
 		if ( ! class_exists( 'WC_InPostShippingMethod' ) )
 		{
 class WC_InPostShippingMethod extends WC_Shipping_Method
 {
-	private $inpost_db_version = '1.0.0';
+	private $inpost_db_version = '1.0.1';
 
 	/**
 	 * Constructor for your shipping class
@@ -98,6 +81,7 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 
 		// Save settings in admin if you have any defined
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+
 	
 	}
 
@@ -114,7 +98,10 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 
 		$table_name = $wpdb->prefix . INPOST_TABLE_NAME;
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		if ( !$wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) )
+		{
+			// Create the table.
+			$sql = "CREATE TABLE $table_name (
 			id int(11) unsigned NOT NULL auto_increment,
 			order_id int(11) NOT NULL,
 			parcel_id varchar(200) NOT NULL default '',
@@ -124,15 +111,45 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 			parcel_target_machine_detail text NOT NULL default '',
 			sticker_creation_date TIMESTAMP NULL DEFAULT NULL,
 			creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			file_name text NOT NULL default '',
 			api_source varchar(3) NOT NULL default '',
 			variables text NOT NULL default '',
 			PRIMARY KEY  id  (id)
-		) DEFAULT CHARSET=utf8;";
+			) DEFAULT CHARSET=utf8;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
 	
-		add_option( "inpost_db_version", $this->inpost_db_version );
+			add_option( "inpost_db_version", $this->inpost_db_version );
+		}
+		else
+		{
+			$installed_ver = get_option( "inpost_db_version" );
+
+			if( $installed_ver != $this->inpost_db_version )
+			{
+				$sql = "CREATE TABLE $table_name (
+			id int(11) unsigned NOT NULL auto_increment,
+			order_id int(11) NOT NULL,
+			parcel_id varchar(200) NOT NULL default '',
+			parcel_status varchar(200) NOT NULL default '',
+			parcel_detail text NOT NULL default '',
+			parcel_target_machine_id varchar(200) NOT NULL default '',
+			parcel_target_machine_detail text NOT NULL default '',
+			sticker_creation_date TIMESTAMP NULL DEFAULT NULL,
+			creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			file_name text NOT NULL default '',
+			api_source varchar(3) NOT NULL default '',
+			variables text NOT NULL default '',
+			PRIMARY KEY  id  (id)
+			) DEFAULT CHARSET=utf8;";
+
+				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+				dbDelta( $sql );
+
+				update_option("inpost_db_version", $this->inpost_db_version);
+			}
+		}
 	}
 
 	/**
@@ -374,6 +391,85 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 		} // End of if(!class_exists())
 	} // End function inpost_shipping_init
 
+	add_action('plugins_loaded', 'myplugin_update_db_check');
+	
+	///
+	// myplugin_update_db_check
+	//
+	function myplugin_update_db_check()
+	{
+		if (get_site_option( 'inpost_db_version' ) != INPOST_DB_VERSION)
+		{
+			inpost_update();
+		}
+	}
+
+	///
+	// inpost_install function
+	// 
+	// @brief The table for the parcels is created.
+	// @params none
+	// @return none
+	// 
+	function inpost_update()
+	{
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . INPOST_TABLE_NAME;
+
+		if ( !$wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) )
+		{
+			// Create the table.
+			$sql = "CREATE TABLE $table_name (
+			id int(11) unsigned NOT NULL auto_increment,
+			order_id int(11) NOT NULL,
+			parcel_id varchar(200) NOT NULL default '',
+			parcel_status varchar(200) NOT NULL default '',
+			parcel_detail text NOT NULL default '',
+			parcel_target_machine_id varchar(200) NOT NULL default '',
+			parcel_target_machine_detail text NOT NULL default '',
+			sticker_creation_date TIMESTAMP NULL DEFAULT NULL,
+			creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			file_name text NOT NULL default '',
+			api_source varchar(3) NOT NULL default '',
+			variables text NOT NULL default '',
+			PRIMARY KEY  id  (id)
+			) DEFAULT CHARSET=utf8;";
+
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			dbDelta( $sql );
+	
+			add_option( "inpost_db_version", INPOST_DB_VERSION );
+		}
+		else
+		{
+			$installed_ver = get_option( "inpost_db_version" );
+
+			if( $installed_ver != INPOST_DB_VERSION )
+			{
+				$sql = "CREATE TABLE $table_name (
+			id int(11) unsigned NOT NULL auto_increment,
+			order_id int(11) NOT NULL,
+			parcel_id varchar(200) NOT NULL default '',
+			parcel_status varchar(200) NOT NULL default '',
+			parcel_detail text NOT NULL default '',
+			parcel_target_machine_id varchar(200) NOT NULL default '',
+			parcel_target_machine_detail text NOT NULL default '',
+			sticker_creation_date TIMESTAMP NULL DEFAULT NULL,
+			creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			file_name text NOT NULL default '',
+			api_source varchar(3) NOT NULL default '',
+			variables text NOT NULL default '',
+			) DEFAULT CHARSET=utf8;";
+
+				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+				dbDelta( $sql );
+
+				update_option("inpost_db_version", INPOST_DB_VERSION);
+			}
+		}
+	}
+
 	///
 	// add_my_js function
 	//
@@ -523,20 +619,11 @@ add_action( 'wp_ajax_nopriv_inpost_get_machines', 'get_machines');
 
 			if ( $values['quantity'] > 0 && $_product->needs_shipping() )
 			{
-				error_log('item id=' . $item_id .
-					' item size=' . $_product->get_dimensions() .
-					' weight='. $_product->get_weight() .
-			       	' quant=' .  $values['quantity'] );
-
 				$dimension = explode(' ', $_product->get_dimensions());
 
 				$width  = trim(@$dimension[0]);
 				$height = trim(@$dimension[2]);
 				$depth  = trim(@$dimension[4]);
-
-				error_log('width=' . $width .
-					' height=' . $height .
-					' depth=' . $depth );
 
 				if($width == 0 || $height == 0 || $depth == 0)
 				{
@@ -548,16 +635,10 @@ add_action( 'wp_ajax_nopriv_inpost_get_machines', 'get_machines');
 				$calc_height = $height * $values['quantity'];
 				$calc_depth  = $depth  * $values['quantity'];
 
-				error_log('cwidth=' . $calc_width .
-					' cheight=' . $calc_height .
-					' cdepth=' . $calc_depth );
-
 				if( $calc_width > $maxWidthFromConfigSizeC ||
 					$calc_height > $maxHeightFromConfigSizeC ||
 					$calc_depth  > $maxDepthFromConfigSizeC)
 				{
-					error_log('setting to false.');
-
 					$is_dimension = false;
 				}
 				$maxSumDimensionsFromProducts += $width + $height + $depth;
@@ -636,6 +717,11 @@ function my_custom_checkout_field_process()
 		{
 			wc_add_notice( __('Mobile is a required field.'), 'error' );
 		}
+		if (isset($_POST['attributes']['inpost_cust_mobile']) &&
+	           strlen($_POST['attributes']['inpost_cust_mobile']) != 9 )
+		{
+			wc_add_notice( __('Mobile number must be 9 characters in length.'), 'error' );
+		}
 	}
 }
 
@@ -654,20 +740,16 @@ function my_custom_checkout_field_update_order_meta( $order_id )
 	{
 		// The user has selected the InPost shipping method we must
 		// verfiy that the Mobile and Locker ID are filled.
-		error_log('Saving the two fields.');
 		if ($_POST['attributes']['inpost_dest_machine'])
 		{
-			error_log('Saving the Locker ID.');
-			update_post_meta( $order_id, 'Locker ID',
+			update_post_meta( $order_id, '_inpost_locker_id',
 				esc_attr($_POST['attributes']['inpost_dest_machine']));
 		}
 		if ($_POST['attributes']['inpost_cust_mobile'])
 		{
-			error_log('Saving the InPost Mobile.');
-			update_post_meta( $order_id, 'InPost Mobile',
+			update_post_meta( $order_id, '_inpost_mobile',
 				esc_attr($_POST['attributes']['inpost_cust_mobile']));
 		}
-
 		$parcel_size = WC()->session->get('inpost_parcel_size');
 		update_post_meta( $order_id, '_inpost_parcel',
 			esc_attr($parcel_size));
