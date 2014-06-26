@@ -3,7 +3,7 @@
  * Plugin Name: InPost
  * Plugin URI: https://github.com/orgs/InPost/dashboard
  * Description: A Parcel and label creation plugin.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: InPost
  * Author URI: http://inpost.co.uk
  * Tested up to: 3.9
@@ -159,8 +159,9 @@ class My_Example_List_Table extends WP_List_Table
 		// Get the URL & API key from the options
 		$options = get_option('woocommerce_inpost_shipping_method_settings');
 
-		$url = $options['api_url'];
-		$key = $options['api_key'];
+		$url        = $options['api_url'];
+		$key        = $options['api_key'];
+		$label_type = $options['label_type'];
 
 		if($url == '' || $key == '')
 		{
@@ -317,7 +318,7 @@ class My_Example_List_Table extends WP_List_Table
 			$params['token']      = $key;
 			$params['methodType'] = 'GET';
 			$params['params']     = array(
-				'format' => 'pdf',
+				'format' => $label_type,
 				'id'     => $parcel_list,
 				'type'   => 'normal'
 			);
@@ -327,10 +328,10 @@ class My_Example_List_Table extends WP_List_Table
 			if($reply['info']['http_code'] == '200')
 			{
 				// Try and save the PDF as a local (server) file
-				$base_name = '/pdf_files/' . 'stickers_' .
+				$base_name = '-pdfs/' . 'stickers_' .
 					date('Y-m-d_H-i-s') . '.pdf';
-				$dir_filename = dirname(__FILE__) . $base_name;
-				$filename     = plugins_url('', __FILE__) . $base_name;
+				$dir_filename = INPOST_PLUGIN_FILE . $base_name;
+				$filename     = plugins_url() . '/inpost' . $base_name;
 
 				$file = fopen($dir_filename, 'wb');
 

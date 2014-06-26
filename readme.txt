@@ -1,112 +1,90 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+=== InPost ===
+Contributors: darthurinpost.co.uk
+Donate link: http://inpost.co.uk
+Tags: e-commerce, woo-commerce, shop, parcel, lockers, shipping
+Requires at least: 3.7
+Tested up to: 3.9
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-InPost's plugin for delivery to one of our lockers.
+Inpost is a free plugin that allows parcel creation and label printing for
+delivery to an InPost locker.
 
 == Description ==
 
-InPost's plugin allows customers to deliver their parcel to a locker near
-where they live.
-
-A few notes about the sections above:
-
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
-
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
-
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+Inpost has created this plugin to allow it's WooCommerce clients to manage the
+packages their customers create. From registering the package as a parcel for
+Inpost delivery to printing out the package labels it's all there.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
+= Minimum Requirements =
 
-e.g.
+* WordPress 3.8 or greater
+* WooCommerce 2.1 or greater
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. Upload the folder 'inpost' to the '/wp-content/plugins/' directory.
+1. Activate the plugin through the 'Plugins' menu in WordPress.
+1. Make sure that the pdf_files subfolder has 777 permisions.
+1. Set up the InPost Shipping method.
+1. If you have your product weight in anything other than kilograms you
+**must** convert the maximum parcel weight from kg to your unit. E.g. 20,000 if you are using gramms.
+1. If you are using a Barcode printer then pick that option on the InPost
+shipping method options screen.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Is this a stand alone plugin? =
 
-An answer to that question.
+No, the plugin requires WooCommerce.
 
-= What about foo bar? =
+= What is InPost =
 
-Answer to foo bar dilemma.
+InPost is a company that provides customers a means of delivering a parcel to 
+one of our lockers for later collection. This removes the need for the 
+customer to stay in and wait for a delivery person.
+
+= What Else Is Required =
+
+You will need to talk to a sales representitive to get an InPost Account. This
+will allow you to connect to our servers for parcel and label creation.
+
+Please call 033 033 52024 (UK only) or contact our sales team on
+ecommerce.team@inpost.co.uk
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets 
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png` 
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. This shows the new fields that the customer is asked to fill in for an
+InPost parcel delivery.
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 1.0.2 - 26/06/2014 =
+* New Feature - Add the ability to select the type of printer that the
+customer needs to print their labels on.
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+= 1.0.1 - 27/05/2014 =
+* Fix - The PDF creation is changed to save to a local (server) file with a 
+download instead of trying to do direct PDF page.
+* Fix - The includes are found correctly.
+
+= 1.0 =
+
+* Created the plugin
 
 == Upgrade Notice ==
 
+= 1.0.2 =
+
+Added the ability to select the kind of printer that the customer has for
+printing out their labels on.
+
+= 1.0.1 =
+
+Changed the database table to allow the saving of the filename.
+
 = 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
 
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
+Created this initial version.
 
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`

@@ -12,6 +12,10 @@ if(!defined("INPOST_DB_VERSION"))
 {
 	define("INPOST_DB_VERSION", "1.0.1");
 }
+if ( ! defined( 'INPOST_PLUGIN_FILE' ) )
+{
+	define('INPOST_PLUGIN_FILE', dirname(__FILE__));
+}
 
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 {
@@ -76,6 +80,7 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 		$this->max_sizea    = $this->get_option( 'max_sizea' );
 		$this->max_sizeb    = $this->get_option( 'max_sizeb' );
 		$this->max_sizec    = $this->get_option( 'max_sizec' );
+		$this->label_type   = $this->get_option( 'label_type' );
 
 		$this->inpost_install();
 
@@ -283,6 +288,15 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 			'description' => __( 'The maximum dimension of a Size C parcel is 41x38x64.', 'inpostplugin' ),
 			'default'     => __( '41x38x64', 'inpostplugin' ),
 			'desc_tip'    => true,
+		),
+		'label_type' => array(
+			'title'       => __( 'Printer Type For Labels', 'inpostplugin' ),
+			'type'        => 'select',
+			'description' => __( 'The type of printer that will be used for label printing.', 'inpostplugin' ),
+			'default'     => __( 'normal', 'inpostplugin' ),
+			'desc_tip'    => true,
+			'options'     => array('pdf' => 'Laser Printer',
+					'Epl2' => 'Barcode Printer'),
 		),
 		);
 	}
