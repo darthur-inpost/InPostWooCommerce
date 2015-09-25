@@ -22,6 +22,9 @@ class inpostparcelsHelper
 
         $ch = curl_init();
 
+	// Switch cURL to not worry about SSL certificate checking.
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
         switch($params['methodType']){
             case 'GET':
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: GET') );
@@ -39,6 +42,7 @@ class inpostparcelsHelper
 
             case 'POST':
                 $string = json_encode($params['params']);
+
                 #$string = $params['params'];
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: POST') );
                 curl_setopt($ch, CURLOPT_URL, $params['url'].$params['ds'].'token='.$params['token']);

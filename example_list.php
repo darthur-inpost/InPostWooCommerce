@@ -3,7 +3,7 @@
  * Plugin Name: InPost
  * Plugin URI: https://github.com/orgs/InPost/dashboard
  * Description: A Parcel and label creation plugin.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: InPost
  * Author URI: http://inpost.co.uk
  * Tested up to: 3.9

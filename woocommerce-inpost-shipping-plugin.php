@@ -250,7 +250,7 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 			'title'       => __( 'Api Url', 'inpostplugin' ),
 			'type'        => 'text',
 			'description' => __( 'This controls where the REST calls go.', 'inpostplugin' ),
-			'default'     => __( 'http://api-uk.easypack24.net/', 'inpostplugin' ),
+			'default'     => __( 'https://api-uk.easypack24.net/', 'inpostplugin' ),
 			'desc_tip'    => true,
 		),
 		'api_key' => array(

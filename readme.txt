@@ -4,7 +4,7 @@ Donate link: http://inpost.co.uk
 Tags: e-commerce, woo-commerce, shop, parcel, lockers, shipping
 Requires at least: 3.7
 Tested up to: 3.9
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,11 @@ download instead of trying to do direct PDF page.
 * Created the plugin
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+
+Added the cURL option which allows us to send / receive REST API calls using
+https.
 
 = 1.0.2 =
 
