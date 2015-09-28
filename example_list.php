@@ -3,10 +3,10 @@
  * Plugin Name: InPost
  * Plugin URI: https://github.com/orgs/InPost/dashboard
  * Description: A Parcel and label creation plugin.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: InPost
  * Author URI: http://inpost.co.uk
- * Tested up to: 3.9
+ * Tested up to: 4.3.1
  * License: GPL2
  *
  * Text Domain: inpost
@@ -330,8 +330,12 @@ class My_Example_List_Table extends WP_List_Table
 				// Try and save the PDF as a local (server) file
 				$base_name = '-pdfs/' . 'stickers_' .
 					date('Y-m-d_H-i-s') . '.pdf';
+				
+				$temp_name    = explode("/", INPOST_PLUGIN_FILE);
+				$temp_name    = $temp_name[count($temp_name) - 1];
+				
 				$dir_filename = INPOST_PLUGIN_FILE . $base_name;
-				$filename     = plugins_url() . '/inpost' . $base_name;
+				$filename     = plugins_url() . '/' . $temp_name . $base_name;
 
 				$file = fopen($dir_filename, 'wb');
 

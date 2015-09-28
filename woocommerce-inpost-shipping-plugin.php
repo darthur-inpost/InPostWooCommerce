@@ -264,8 +264,8 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 		'max_weight' => array(
 			'title'       => __( 'Max Weight', 'inpostplugin' ),
 			'type'        => 'text',
-			'description' => __( 'The maximum weight of a parcel is 25kg.', 'inpostplugin' ),
-			'default'     => __( '25', 'inpostplugin' ),
+			'description' => __( 'The maximum weight of a parcel is 15kg.', 'inpostplugin' ),
+			'default'     => __( '15', 'inpostplugin' ),
 			'desc_tip'    => true,
 		),
 		'max_sizea' => array(
@@ -285,8 +285,8 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 		'max_sizec' => array(
 			'title'       => __( 'Max dimension - size C', 'inpostplugin' ),
 			'type'        => 'text',
-			'description' => __( 'The maximum dimension of a Size C parcel is 41x38x64.', 'inpostplugin' ),
-			'default'     => __( '41x38x64', 'inpostplugin' ),
+			'description' => __( 'The maximum dimension of a Size C parcel is 38x38x64.', 'inpostplugin' ),
+			'default'     => __( '38x38x64', 'inpostplugin' ),
 			'desc_tip'    => true,
 		),
 		'label_type' => array(
@@ -495,7 +495,7 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 	function add_my_js()
 	{
 		$suffix      = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$assets_path = str_replace( array( 'http:', 'https:' ), '', plugins_url('/assets/js/checkout', __FILE__) );
+		$assets_path = str_replace( array( 'http:', 'https:' ), '', plugins_url('/assets/js/inpostcheckout', __FILE__) );
 
 		if(is_checkout())
 		{
@@ -514,7 +514,7 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 			
 			//wp_enqueue_script('checkout_machines', 'https://geowidget.inpost.co.uk/dropdown.php?dropdown_name=machine', array('jquery'), WC_VERSION, true);
 
-			wp_enqueue_script('checkout_js', $assets_path . $suffix . '.js', array('jquery', 'chosen', 'woocommerce', 'wc-checkout', 'wc-add-to-cart', 'wc-chosen', 'wc-cart-fragments'), WC_VERSION, true);
+			wp_enqueue_script('inpostcheckoutjs', $assets_path . $suffix . '.js', array('jquery', 'chosen', 'woocommerce', 'wc-checkout', 'wc-add-to-cart', 'wc-cart-fragments'), WC_VERSION, true);
 
 			$ret = check_weight();
 
@@ -527,14 +527,13 @@ class WC_InPostShippingMethod extends WC_Shipping_Method
 			{
 				echo '<input type="hidden" name="inpost_can_use" id="inpost_can_use" value="0">';
 			}
-
 		}
 
 		// in javascript, object properties are accessed as
 		// ajax_object.ajax_url, ajax_object.we_value
 		//wp_localize_script( 'checkout_js', 'ajax_object',
 		//            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );	
-		}
+	}
 
 	add_action('wp_enqueue_scripts', 'add_my_js');
 

@@ -3,8 +3,8 @@ Contributors: darthurinpost.co.uk
 Donate link: http://inpost.co.uk
 Tags: e-commerce, woo-commerce, shop, parcel, lockers, shipping
 Requires at least: 3.7
-Tested up to: 3.9
-Stable tag: 1.0.3
+Tested up to: 4.3.1
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,11 @@ download instead of trying to do direct PDF page.
 * Created the plugin
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+
+The Woo Commerce plugin was updated and it caused some issues with the InPost
+plugin. The maximum weight for parcel and the maximum size is adjusted.
 
 = 1.0.3 =
 
