@@ -8,8 +8,8 @@ Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Inpost is a free plugin that allows parcel creation and label printing for
-delivery to an InPost locker.
+InPost WooCommerce is a free plugin that allows parcel creation and label
+printing for delivery to an InPost locker.
 
 == Description ==
 
@@ -26,10 +26,13 @@ Inpost delivery to printing out the package labels it's all there.
 
 1. Upload the folder 'inpost' to the '/wp-content/plugins/' directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Make sure that the pdf_files subfolder has 777 permisions.
+1. Create or move the sub-folder inpostwoocommerce-pdfs folder to be at the
+same level as the plugin. Your PDF labels will be stored in there. If you do
+**not** do this label creation will **NOT** work.
+1. Make sure that the inpostwoocommerce-pdfs files subfolder has 777 permisions.
 1. Set up the InPost Shipping method.
 1. If you have your product weight in anything other than kilograms you
-**must** convert the maximum parcel weight from kg to your unit. E.g. 20,000 if you are using gramms.
+**must** convert the maximum parcel weight from kg to your unit. E.g. 20,000 if you are using grams.
 1. If you are using a Barcode printer then pick that option on the InPost
 shipping method options screen.
 
@@ -60,11 +63,20 @@ InPost parcel delivery.
 
 == Changelog ==
 
+= 1.0.4 - 29/09/2015 =
+
+* Fix - The code did not correctly pickup the name of the installation folder
+leading to issues printing labels.
+* Fix - The javascript would sometimes display the extra fields more than once
+on the checkout.
+
 = 1.0.2 - 26/06/2014 =
+
 * New Feature - Add the ability to select the type of printer that the
 customer needs to print their labels on.
 
 = 1.0.1 - 27/05/2014 =
+
 * Fix - The PDF creation is changed to save to a local (server) file with a 
 download instead of trying to do direct PDF page.
 * Fix - The includes are found correctly.
